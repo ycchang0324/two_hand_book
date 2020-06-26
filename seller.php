@@ -9,6 +9,7 @@ class Seller {
   private $subject;
   private $price;
   private $others;
+  private $state;
 
   function __construct($_name, $_stdId, $_category, $_subject, $_price, $_others) {
     $this->name = $_name;
@@ -16,12 +17,13 @@ class Seller {
     $this->category = $_category;
     $this->subject = $_subject;
     $this->price = $_price;
+    $this->state = '未收到書';
     $this->others = $_others;
   }
     function store(){
         $conn = connection();
-        $sql = "INSERT INTO seller(name, stdId, category, subject, price, others)
-        VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->others')";
+        $sql = "INSERT INTO seller(name, stdId, category, subject, price, state, others)
+        VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->state','$this->others')";
 
         if ($conn->query($sql) === TRUE) {
           echo "New record created successfully";
