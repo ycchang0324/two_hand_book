@@ -95,7 +95,7 @@ class ConfirmMailer
 
 }
 
-$confirm_mailer = new ConfirmMailer;
+//$confirm_mailer = new ConfirmMailer;
 
 ?>
 
