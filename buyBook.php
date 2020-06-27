@@ -52,7 +52,7 @@ for($x = 0; $x < 12; $x++){
 
 }
 
-    echo json_encode(["users"=>$data]);
+    json_encode(["users"=>$data]);
 ?>
 
       

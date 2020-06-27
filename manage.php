@@ -1,7 +1,5 @@
 <?php
 
-require 'db_connection.php';
-
 class Manage {
   private $account;
   private $password;
@@ -22,7 +20,7 @@ class Manage {
                 $this->isMember = 1;
         }
         
-        echo $this->isMember;
+        return $this->isMember;
         $conn->close();
     }
         
