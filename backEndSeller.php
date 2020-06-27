@@ -19,7 +19,8 @@ $subject = $data -> subject;
 $price = $data -> price;
 $others = $data -> others;
 
-  /*
+
+/*    
 $name = '張原嘉';
 $stdId = 'b08901049';
 $catagory = '大一必修';
@@ -27,9 +28,9 @@ $subject = '微積分';
 $price = 200;
 $others = '';
 */
-
 $seller = new Seller($name, $stdId, $category, $subject,$price, $others);
+
 $seller->store();
-$seller->sendMail();
+//$seller->sendMail();
 
 ?>

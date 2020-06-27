@@ -27,24 +27,24 @@ array("資料結構",0,0,0,0)
 for($x = 0; $x < 12; $x++){
     $subject = $data[$x][0];
     
-    $sql = "SELECT id FROM seller WHERE subject = '$subject' AND price = 200";
+    $sql = "SELECT id FROM bookorder WHERE subject = '$subject' AND price = 200";
      $result = $conn->query($sql);
     
     $data[$x][1] = $result->num_rows;
 
-    $sql = "SELECT id FROM seller WHERE subject = '$subject' AND price = 300";
+    $sql = "SELECT id FROM bookorder WHERE subject = '$subject' AND price = 300";
     $result = $conn->query($sql);
     
     
     $data[$x][2] = $result->num_rows;
     
-    $sql = "SELECT id FROM seller WHERE subject = '$subject' AND price = 500";
+    $sql = "SELECT id FROM bookorder WHERE subject = '$subject' AND price = 500";
     $result = $conn->query($sql);
     
     
     $data[$x][3] = $result->num_rows;
     
-    $sql = "SELECT id FROM seller WHERE subject = '$subject' AND price = 700";
+    $sql = "SELECT id FROM bookorder WHERE subject = '$subject' AND price = 700";
     $result = $conn->query($sql);
     
     

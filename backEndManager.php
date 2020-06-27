@@ -7,6 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require_once 'db_connection.php';
 require 'manage.php';
+require_once 'confirm_mailer.php';
 
 $data = json_decode(file_get_contents("php://input"));
 $account = $data -> account;
@@ -17,6 +18,6 @@ $success = $manager->login();
 
 json_encode(["success"=>$success]);
 
-$manager->notGivenBack();
+
 
 ?>
