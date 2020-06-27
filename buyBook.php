@@ -1,9 +1,11 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+$dataFromFrontEnd = json_decode(file_get_contents("php://input"));
 
 require 'db_connection.php';
 $conn = connection();
@@ -52,7 +54,8 @@ for($x = 0; $x < 12; $x++){
 
 }
 
-    json_encode(["users"=>$data]);
+    json_encode(["data"=>$data]);
+
 ?>
 
       

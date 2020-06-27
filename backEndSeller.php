@@ -31,6 +31,6 @@ $others = '';
 $seller = new Seller($name, $stdId, $category, $subject,$price, $others);
 
 $seller->store();
-//$seller->sendMail();
+$seller->sendMail();
 
 ?>
