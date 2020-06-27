@@ -17,6 +17,6 @@ $success = $manager->login();
 
 json_encode(["success"=>$success]);
 
-
+$manager->notGivenBack();
 
 ?>
