@@ -82,11 +82,11 @@ class ConfirmMailer
 	public function sendMail()
 	{
 		if(!$this -> m_mail->send()) {
-			echo 'Message could not be sent.';
-			echo 'Mailer Error: ' . $this->mail->ErrorInfo;
+			//echo 'Message could not be sent.';
+			//echo 'Mailer Error: ' . $this->mail->ErrorInfo;
 		}
 		else{
-			echo 'Message has been sent';
+			//echo 'Message has been sent';
 		}
 	}
  

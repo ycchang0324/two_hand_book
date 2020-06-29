@@ -13,9 +13,9 @@ if ($conn->connect_error) {
 
 $sql = "CREATE DATABASE second_hand_book";
 if($conn->query($sql) === TRUE){
-    echo "Database created successfully";
+    //echo "Database created successfully";
 }else{
-    echo "Error creating database: " . $conn->error;
+    //echo "Error creating database: " . $conn->error;
 }
 
 $conn->close();
@@ -23,6 +23,7 @@ $conn->close();
 $dbname = "second_hand_book";
 $conn = new mysqli($servername,$username,$password,$dbname);
 // sql to create table
+
 
 $sql = "CREATE TABLE BookOrder (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -37,9 +38,9 @@ reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )";
 
 if ($conn->query($sql) === TRUE) {
-  echo "Table BookOrder created successfully";
+  //echo "Table BookOrder created successfully";
 } else {
-  echo "Error creating table: " . $conn->error;
+  //echo "Error creating table: " . $conn->error;
 }
 
 
@@ -52,11 +53,24 @@ reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )";
 
 if ($conn->query($sql) === TRUE) {
-  echo "Table Seller created successfully";
+  //echo "Table Seller created successfully";
 } else {
-  echo "Error creating table: " . $conn->error;
+  //echo "Error creating table: " . $conn->error;
 }
 
+
+$sql = "CREATE TABLE Login (
+id INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+account VARCHAR(30) NOT NULL,
+password VARCHAR(30) NOT NULL,
+reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+  //echo "Table Seller created successfully";
+} else {
+  //echo "Error creating table: " . $conn->error;
+}
 
 $conn->close();
 

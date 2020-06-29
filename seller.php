@@ -43,17 +43,17 @@ class Seller {
             VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->state','$this->others')";
 
             if ($conn->query($sql) === TRUE) {
-              echo "New record created successfully";
+              //echo "New record created successfully";
             } else {
-              echo "Error: " . $sql . "<br>" . $conn->error;
+              //echo "Error: " . $sql . "<br>" . $conn->error;
             }    
             
             $sql = "INSERT INTO seller(stdId, bookNum)
             VALUES ('$this->stdId',1)";
             if ($conn->query($sql) === TRUE) {
-              echo "New record created successfully";
+              //echo "New record created successfully";
             } else {
-              echo "Error: " . $sql . "<br>" . $conn->error;
+              //echo "Error: " . $sql . "<br>" . $conn->error;
             } 
         }
         else{
@@ -74,15 +74,16 @@ class Seller {
             VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->state','$this->others')";
 
             if ($conn->query($sql) === TRUE) {
-              echo "New record created successfully";
+                echo json_encode(["success" => 1,"msg"=>"success insert order"]);
             } else {
-              echo "Error: " . $sql . "<br>" . $conn->error;
+              //echo "Error: " . $sql . "<br>" . $conn->error;
             }    
             
             }
             
              else
-                echo "too much";
+                //echo "too much"
+                 ;
             
             
             

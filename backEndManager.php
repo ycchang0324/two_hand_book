@@ -16,7 +16,7 @@ $password = $data -> password;
 $manager = new Manage($account,$password);
 $success = $manager->login();
 
-json_encode(["success"=>$success]);
+//json_encode(["success"=>$success]);
 
 
 
