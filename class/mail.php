@@ -69,7 +69,7 @@ class ConfirmMailer
     
     public function sendMailForm(){
         
-        $this->setUsernameAndPassword("b08901049@ntu.edu.tw", "Ycchang0324");
+        $this->setUsernameAndPassword("b08901049@ntu.edu.tw", "XXXXXXXXXX");
         $this->addRecipient($this->stdId . '@ntu.edu.tw', "我是收件人");
         
         $body = $this->name .'先生/小姐您好，感謝您賣出' . $this->subject . '的書，為' . $this->price . '元';
