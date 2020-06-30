@@ -6,8 +6,8 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require_once 'db_connection.php';
-require 'seller.php';
-require_once 'confirm_mailer.php';
+require './class/seller.php';
+require_once './mail/confirm_mailer.php';
 
 // POST DATA
 
