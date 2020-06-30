@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $dataFromFrontEnd = json_decode(file_get_contents("php://input"));
 
-require 'db_connection.php';
+require './db/db_connection.php';
 $conn = connection();
 
 $data = [

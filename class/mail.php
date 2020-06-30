@@ -1,12 +1,11 @@
 
 <?php
 
-//回到根目錄
-$parentDirName = dirname(__FILE__);
+
+$parentDirName = dirname(dirname(__FILE__));
 
 //引用PHPMailer-5.2-stable資料夾裡面的寄信功能，注意：最外層的資料夾內要有PHPMailer-5.2-stable資料夾，和comfirm_mailer.php的檔案
 require_once("$parentDirName/PHPMailer-5.2-stable/PHPMailerAutoload.php"); //記得引入檔案 
-
 
 class ConfirmMailer
 {
@@ -56,9 +55,6 @@ class ConfirmMailer
 		$this -> m_mail->AltBody = $body;
 	}
     
-    
-    
-
     //確認寄信
 	public function sendMail()
 	{
@@ -70,6 +66,16 @@ class ConfirmMailer
 			//echo 'Message has been sent';
 		}
 	}
+    
+    public function sendMailForm(){
+        
+        $this->setUsernameAndPassword("b08901049@ntu.edu.tw", "Ycchang0324");
+        $this->addRecipient($this->stdId . '@ntu.edu.tw', "我是收件人");
+        
+        $body = $this->name .'先生/小姐您好，感謝您賣出' . $this->subject . '的書，為' . $this->price . '元';
+        $this -> addBody( $body );
+        $this -> sendMail();
+    }
  
 	
 

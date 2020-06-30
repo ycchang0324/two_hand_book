@@ -1,5 +1,6 @@
 <?php
 
+
 class Manage {
   
 
@@ -25,6 +26,8 @@ class Manage {
 
     if ($conn->query($sql) === TRUE) {
           echo json_encode(["success"=>1,"msg"=>"成功收書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
+          $confirm_mailer = new ConfirmMailer;
+          
         } else {
             $msg = "收書登記失敗: " . $conn->error;
           echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
