@@ -55,25 +55,6 @@ class ConfirmMailer
 		$this -> m_mail->Body = $body;
 		$this -> m_mail->AltBody = $body;
 	}
-	
-    //新增寄件人
-	public function addRecipient( $recipientMail, $recipientName )
-	{
-		$this -> m_mail -> addAddress($recipientMail, $recipientName);
-	}
-    
-    
-    //把所有寄件人列出來
-	public function listRecipients()
-	{
-		//待填
-	}
-    
-    //把所有寄件人移除
-	public function removeAllRecipient()
-	{
-		//待填
-	}
     
     
     

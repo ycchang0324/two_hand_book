@@ -6,17 +6,26 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require_once 'db_connection.php';
-require 'manage.php';
+
 require_once 'confirm_mailer.php';
 
 $data = json_decode(file_get_contents("php://input"));
 $account = $data -> account;
 $password = $data -> password;
+$isMember = 0;
 
-$manager = new Manage($account,$password);
-$success = $manager->login();
+$conn = connection();
+$sql = "SELECT account,password FROM Login ";
+$result = $conn->query($sql);
+while($row = $result->fetch_assoc()) {
+    if(($row["account"] == $account) && ($row["password"] == $password))
+        $isMember = 1;
+}
 
-json_encode(["success"=>$success]);
+    
+$conn->close();
+
+echo json_encode(["success"=> $isMember ]);
 
 
 

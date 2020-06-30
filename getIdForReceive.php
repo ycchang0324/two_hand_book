@@ -6,22 +6,16 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require_once 'db_connection.php';
-require 'seller.php';
+require 'manage.php';
 require_once 'confirm_mailer.php';
 
-// POST DATA
+//$data = json_decode(file_get_contents("php://input"));
+//$stdId = $data -> stdId;
 
-$data = json_decode(file_get_contents("php://input"));
-$name = $data -> name;
-$stdId = $data -> stdId;
-$category = $data -> category;
-$subject = $data -> subject;
-$price = $data -> price;
-$others = $data -> others;
+$manager = new Manage();
+$manager->receiveBookStdId("b08901049");
 
 
-$seller = new Seller($name, $stdId, $category, $subject,$price, $others);
 
-$seller->store();
 
 ?>
