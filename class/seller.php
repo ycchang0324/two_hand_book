@@ -21,6 +21,8 @@ class Seller {
     $this->state = '未收到書';
     $this->others = $_others;
     
+      
+    
   }
     
     function isNew(){
@@ -37,17 +39,18 @@ class Seller {
     
     function store(){
         $conn = connection();
+       
         
         if( $this->isNew() == 1 ){
             $sql = "INSERT INTO bookorder(name, stdId, category, subject, price, state, others)
             VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->state','$this->others')";
                 
             if ($conn->query($sql) === TRUE) {
-            //  echo json_encode(["success" => 1,"msg"=>"success insert order"]);
+              echo json_encode(["success" => 1,"msg"=>"success insert order"]);
             } else {
               
-                //$msg = "Error: " . $sql . "<br>" . $conn->error;
-              //  echo json_encode(["success" => 0,"msg"=>$msg]);
+                $msg = "Error: " . $sql . "<br>" . $conn->error;
+                echo json_encode(["success" => 0,"msg"=>$msg]);
             } 
             
             
@@ -58,7 +61,10 @@ class Seller {
                 echo json_encode(["success" => 1,"msg"=>"success insert order"]);
                 
                 $confirm_mailer = new ConfirmMailer;
-                $confirm_mailer->sendMailForm();
+                $confirm_mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
+                $confirm_mailer -> sendMailForm();
+                
+                
             } else {
               $msg = "Error: " . $sql . "<br>" . $conn->error;
               echo json_encode(["success" => 0,"msg"=>$msg]);
@@ -78,8 +84,13 @@ class Seller {
                $sql = "UPDATE Seller SET bookNum = '$bookNum' WHERE stdId = '$this->stdId'" ;
                 $conn->query($sql); 
                 
+                
                  $sql = "INSERT INTO bookorder(name, stdId, category, subject, price, state, others)
             VALUES ('$this->name', '$this->stdId', '$this->category', '$this->subject', '$this->price', '$this->state','$this->others')";
+                
+                $confirm_mailer = new ConfirmMailer;
+                $confirm_mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
+                $confirm_mailer -> sendMailForm();
 
             if ($conn->query($sql) === TRUE) {
                 echo json_encode(["success" => 1,"msg"=>"success insert order"]);
@@ -105,6 +116,7 @@ class Seller {
 
         $conn->close();
     }
+    
         
 }
 
