@@ -30,7 +30,7 @@ class Seller {
         $sql = "SELECT stdId FROM Seller ";
         $result = $conn->query($sql);
         while($row = $result->fetch_assoc()) {
-            if($row["stdId"]==$this->stdId)
+            if($row["stdId"] == $this->stdId)
                 return 0;
         }
         return 1;
@@ -54,8 +54,8 @@ class Seller {
             } 
             
             
-            $sql = "INSERT INTO seller(stdId, bookNum)
-            VALUES ('$this->stdId',1)";
+            $sql = "INSERT INTO seller(stdId, name, bookNum)
+            VALUES ('$this->stdId','$this->name',1)";
             if ($conn->query($sql) === TRUE) {
                 
                 echo json_encode(["success" => 1,"msg"=>"success insert order"]);
