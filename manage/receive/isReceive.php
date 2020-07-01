@@ -13,7 +13,7 @@ $data = json_decode(file_get_contents("php://input"));
 $id = $data -> id;
 
 $manager = new Manage();
-$manager->isReceive($id);
+$manager->isReceive(46);
 
 
 

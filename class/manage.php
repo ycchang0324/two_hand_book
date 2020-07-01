@@ -22,11 +22,26 @@ class Manage {
     
     function isReceive($id){
         $conn = connection();
-        $sql = "UPDATE bookorder SET state='已收到書' WHERE id='$id'";
+        $sql = "UPDATE bookorder SET state='已收到書' WHERE id='$id' AND state = '未收到書'";
 
     if ($conn->query($sql) === TRUE) {
           echo json_encode(["success"=>1,"msg"=>"成功收書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-          $confirm_mailer = new ConfirmMailer;
+        
+        $confirm_mailer = new ConfirmMailer;
+        $sql = "SELECT * FROM bookorder WHERE id='$id'";
+        $result = $conn->query($sql);
+        
+        if($result->num_rows > 0)
+             $orderList = $result -> fetch_all(MYSQLI_ASSOC);
+        
+        $confirm_mailer -> sellerSetMail( 
+            $orderList[0][stdId], 
+            $orderList[0][name], 
+            $orderList[0][subject], 
+            $orderList[0][price] 
+        );
+        $confirm_mailer->sendMailReceive();
+        
           
         } else {
             $msg = "收書登記失敗: " . $conn->error;

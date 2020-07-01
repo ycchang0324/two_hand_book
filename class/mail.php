@@ -7,7 +7,7 @@ $parentDirName = dirname(dirname(__FILE__));
 //引用PHPMailer-5.2-stable資料夾裡面的寄信功能，注意：最外層的資料夾內要有PHPMailer-5.2-stable資料夾，和comfirm_mailer.php的檔案
 require_once("$parentDirName/PHPMailer-5.2-stable/PHPMailerAutoload.php"); //記得引入檔案 
 
-//require_once("$parentDirName/db/db_connection.php"); 
+require_once("$parentDirName/db/db_connection.php"); 
 
 class ConfirmMailer
 {
@@ -87,8 +87,10 @@ class ConfirmMailer
 		$this -> m_mail -> addAddress($recipientMail, $recipientName);
 	}
     
-    public function sendMailForm(){
-        
+    
+    
+    
+    public function setUser(){
         $conn = connection();
         $account = 'ntueeshb@gmail.com';
         
@@ -102,10 +104,30 @@ class ConfirmMailer
         $password = $orderList[0][password];
         
         $this->setUsernameAndPassword($account, $password);
-        $this->addRecipient($this->stdId . '@ntu.edu.tw', "我是收件人");
-        //$this->addRecipient($this->m_mail->Username, "我是收件人");
+        
+    }
+    
+    
+    public function sendMailForm(){
+        $this->setUser();
+        
+        $this->addRecipient($this->stdId . '@ntu.edu.tw', $this->name);
+        
         
         $body = $this->name .'先生/小姐您好，感謝您賣出' . $this->subject . '的書，為' . $this->price . '元';
+        $this -> addBody( $body );
+        
+        
+        $this -> sendMail();
+    }
+    
+    public function sendMailReceive(){
+        $this->setUser();
+        
+        $this->addRecipient($this->stdId . '@ntu.edu.tw', $this->name);
+        
+        
+        $body = $this->name .'先生/小姐您好，已收到' . $this->subject . '的書，為' . $this->price . '元';
         $this -> addBody( $body );
         
         
