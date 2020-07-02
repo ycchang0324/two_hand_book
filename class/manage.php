@@ -68,11 +68,16 @@ class Manage {
             
         }
         
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer->sendMailNotReceive();
+        
 
         $conn->close();
     }
+    
+    function sendMailNotReceive(){
+        $confirm_mailer = new ConfirmMailer;
+        $confirm_mailer->sendMailNotReceive();
+    }
+    
     
     
     function buyBookToFront($id){
@@ -189,15 +194,16 @@ class Manage {
                 echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
             }
         }
-        
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer -> sendMailNotGivenBack();
-            
-        
-
+    
         $conn->close(); 
         
     }
+    
+    function sendMailNotGivenBack(){
+        $confirm_mailer = new ConfirmMailer;
+        $confirm_mailer -> sendMailNotGivenBack();
+    }
+    
     
     function showNotGivenBack(){
         $conn = connection();
