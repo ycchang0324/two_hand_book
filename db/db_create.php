@@ -47,7 +47,7 @@ if ($conn->query($sql) === TRUE) {
 
 
 $sql = "CREATE TABLE Seller (
-stdId INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+stdId INT(6) NOT NULL,
 name VARCHAR(30) NOT NULL,
 bookNum INT(2) NOT NULL,
 reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -65,6 +65,18 @@ id INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 account VARCHAR(30) NOT NULL,
 password VARCHAR(30) NOT NULL,
 reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+  //echo "Table Seller created successfully";
+} else {
+  //echo "Error creating table: " . $conn->error;
+}
+
+$sql = "CREATE TABLE Email (
+
+account VARCHAR(30) NOT NULL,
+password VARCHAR(30) NOT NULL
 )";
 
 if ($conn->query($sql) === TRUE) {
