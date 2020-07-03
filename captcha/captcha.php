@@ -44,9 +44,12 @@
         }
        
         $strx = rand(3, 8);
+        $scaleX = rand(2, 5);
+        $scaleY = rand(5, 9);
         for ($i = 0; $i < $nums; $i++) {
             $strpos = rand(1, 6);
-            imagestring($image, 5, $strx, $strpos, substr($code, $i, 1), $black);
+            // imagestring($image, 5, $strx, $strpos, substr($code, $i, 1), $black);
+            imagettftext($image, 30, 0, $scaleX*$width/10 , $scaleY*$high/10, $black, '1980sWriter.ttf', $code);
             $strx += rand(10, 30);
         }
 
