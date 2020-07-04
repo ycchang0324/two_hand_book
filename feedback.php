@@ -9,31 +9,41 @@ require './db/db_connection.php';
 require_once './class/mail.php';
 
 // POST DATA
-
-$data = json_decode(file_get_contents("php://input"));
-
-
-$comment = $data -> comment;
-
 $conn = connection();
 
-$sql = "INSERT INTO feedback (comment)
-VALUES ('$feedback')";
+$data = json_decode(file_get_contents("php://input"));
+if( $data -> comment != "" ){
 
-if ($conn->query($sql) === TRUE) {
-    $commentSql = "SELECT * FROM feedback ";
-        $result = $conn->query($commentSql);
-        if($result->num_rows > 0){
-            $allComment = $result -> fetch_all(MYSQLI_ASSOC);
-            echo json_encode(["success"=>1,"allComment"=>$allComment],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        }
-        else{
-            echo json_encode(["success"=>0,"msg"=>"no comments"]);
-        }
-  
-} else {
-  echo json_encode(["success"=>0,"msg"=>"False"]);
+    $comment = $data -> comment;
+    $reply = $data -> reply;
+
+    //$comment = "1";
+    //$reply = "";
+
+    
+
+
+    $sql = "INSERT INTO feedback (comment,reply)
+    VALUES ('$comment','$reply')";
+    $conn -> query($sql);
+    
+    if ($conn->query($sql) === TRUE) {
+        $commentSql = "SELECT * FROM feedback ";
+            $result = $conn->query($commentSql);
+            if($result->num_rows > 0){
+                $allComment = $result -> fetch_all(MYSQLI_ASSOC);
+                echo json_encode(["success"=>1,"allComment"=>$allComment],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
+            }
+            else{
+                echo json_encode(["success"=>0,"msg"=>"no comments"]);
+            }
+
+    } else {
+
+      echo json_encode(["success"=>0,"msg"=>"False"]);
+        
+    }
+    
 }
-
 $conn->close();
 ?>
