@@ -21,8 +21,8 @@ $sql = "INSERT INTO feedback (comment)
 VALUES ('$feedback')";
 
 if ($conn->query($sql) === TRUE) {
-    $sql = "SELECT * FROM feedback ";
-        $result = $conn->query($sql);
+    $commentSql = "SELECT * FROM feedback ";
+        $result = $conn->query($commentSql);
         if($result->num_rows > 0){
             $allComment = $result -> fetch_all(MYSQLI_ASSOC);
             echo json_encode(["success"=>1,"allComment"=>$allComment],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
