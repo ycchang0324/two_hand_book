@@ -13,7 +13,6 @@ require_once './class/mail.php';
 $data = json_decode(file_get_contents("php://input"));
 
 
-
 $comment = $data -> comment;
 
 $conn = connection();
@@ -29,11 +28,11 @@ if ($conn->query($sql) === TRUE) {
             echo json_encode(["success"=>1,"allComment"=>$allComment],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
         }
         else{
-            echo json_encode(["success"=>0]);
+            echo json_encode(["success"=>0,"msg"=>"no comments"]);
         }
   
 } else {
-  echo json_conde(["success"=>0]);
+  echo json_encode(["success"=>0,"msg"=>"False"]);
 }
 
 $conn->close();
