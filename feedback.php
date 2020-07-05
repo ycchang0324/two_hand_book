@@ -20,16 +20,13 @@ if( $data -> comment != "" ){
     //$comment = "1";
     //$reply = "";
 
-    
-
-
     $sql = "INSERT INTO feedback (comment,reply)
     VALUES ('$comment','$reply')";
-    $conn -> query($sql);
+     
     
-    if ($conn->query($sql) === TRUE) {
+    if ($conn -> query($sql) === TRUE) {
         
-                echo json_encode(["success"=>1,"msg"=>"comment successfully"]);
+      echo json_encode(["success"=>1,"msg"=>"comment successfully"]);
         
 
     } else {
