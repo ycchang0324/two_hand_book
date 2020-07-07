@@ -33,7 +33,8 @@ class ConfirmMailer
 		$this -> m_mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
 		$this -> m_mail->Port = 465; // TCP port to connect to
         //$this -> m_mail->CharSet = "utf-8"; //郵件編碼
-		$this -> m_mail->setFrom('ntueeshb@gmail.com', '二手書網站'); //寄件的Gmail$
+		//$this -> m_mail->setFrom('ntueeshb@gmail.com', '二手書網站'); //寄件的Gmail$
+        $this -> m_mail->setFrom('ntueesaad@gmail.com', '台大電機學術部'); //寄件的Gmail$
             
 		$this -> m_mail->Subject = '二手書網站';
 		$this -> m_mail->Body = '報告班長，完全沒有畫面';
@@ -55,7 +56,9 @@ class ConfirmMailer
         $this -> subject = $_subject;
         $this -> price = $_price;
     }
-	
+	public function removeAllRecipient(){
+        $this->m_mail->ClearAllRecipients( );
+    }
 
     //更改主旨
 	public function addSubject( $subject )
@@ -79,7 +82,7 @@ class ConfirmMailer
 			echo 'Mailer Error: ' . $this->m_mail->ErrorInfo;
 		}
 		else{
-			echo 'Message has been sent';
+			echo 'Message has been sent<br>';
 		}
 	}
     
