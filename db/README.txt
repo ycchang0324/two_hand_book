@@ -1,0 +1,3 @@
+一開始建立資料庫second_hand_book，點擊db_create.php，即可建立資料庫second_hand_book，
+接著建立六個資料表，分別點擊六個資料表的create.php，最後在login.php和email.php 插入
+管理端的帳密和寄信信箱的帳密。
