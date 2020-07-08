@@ -141,7 +141,7 @@ class Mailer
     
     
     
-    
+    //呼叫這個函式，就能寄信給填賣書表單的人
     public function sendMailForm(){
         $this->setUser();
         $this->removeAllRecipient();
@@ -150,6 +150,7 @@ class Mailer
         
         
         $body = $this->name .'先生/小姐您好，感謝您賣出' . $this->subject . '的書，為' . $this->price . '元';
+        $body .= "<br>" , "請您於9/10(四)、9/11(五)中午12:30-13:10將書籍和 " . $this->fee . "元手續費代誌博理館B1系K" 
         $this -> addBody( $body );
         
         

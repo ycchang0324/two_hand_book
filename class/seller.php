@@ -22,7 +22,7 @@ class Seller {
         $this->category = $_category;
         $this->subject = $_subject;
         $this->price = $_price;
-        $this->state = '未收到書';
+        $this->state = '尚未收到書';
         $this->fee = $_fee;
         $this->others = $_others;
 
@@ -59,7 +59,7 @@ class Seller {
                     '$this->state',
                     '$this->others'
                     )";
-                
+            //如果成功插入bookorder訂單，則回傳success為1,msg為success insert order
             if ($conn->query($sql) === TRUE) {
               echo json_encode(["success" => 1,"msg"=>"success insert order"]);
             } else {
@@ -68,19 +68,17 @@ class Seller {
                 echo json_encode(["success" => 0,"msg"=>$msg]);
             } 
             
-            
+            //要求插入seller資料
             $sql = "INSERT INTO seller(stdId, name, bookNum)
             VALUES ('$this->stdId',
                     '$this->name',
                     1
                     )";
             
+            //若插入成功，則寄送信件給賣家
             if ($conn->query($sql) === TRUE) {
-                /*
-                $sql = "DELETE FROM seller WHERE stdId = ''";
-                conn->query($sql);
-                echo json_encode(["success" => 1,"msg"=>"success insert order"]);
-                */
+                
+                
                 
                 $mailer = new Mailer;
                 $mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
@@ -92,6 +90,7 @@ class Seller {
               echo json_encode(["success" => 0,"msg"=>$msg]);
             } 
         }
+        //若賣家不是第一次賣書，則取出$bookNum之值
         else{
             $sql = "SELECT * FROM seller WHERE stdId = '$this->stdId' ";
             $result = $conn->query($sql);
@@ -100,7 +99,7 @@ class Seller {
                     $bookNum = $row["bookNum"];
                 
             }
-            
+            //若$bookNum 在5以下，則將$bookNum的值加一，並插入新的訂單，並記信給賣家
             if($bookNum < 5 ){
                 
                 $bookNum = $bookNum + 1;
@@ -110,46 +109,31 @@ class Seller {
                 
                 
                  $sql = "INSERT INTO bookorder(name, stdId, category, subject, price, fee, state, others)
-            VALUES ('$this->name',
-                    '$this->stdId', 
-                    '$this->category', 
-                    '$this->subject', 
-                    '$this->price', 
-                    '$this->fee', 
-                    '$this->state',
-                    '$this->others'
-                    )";
+                VALUES ('$this->name',
+                        '$this->stdId', 
+                        '$this->category', 
+                        '$this->subject', 
+                        '$this->price', 
+                        '$this->fee', 
+                        '$this->state',
+                        '$this->others'
+                        )";
+
+                    $mailer = new Mailer;
+                    $mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
+                    $mailer -> sendMailForm();
                 
-                $mailer = new Mailer;
-                $mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
-                $mailer -> sendMailForm();
-
-            if ($conn->query($sql) === TRUE) {
-                echo json_encode(["success" => 1,"msg"=>"success insert order"]);
-            } else {
-                $msg = "Error: " . $sql . "<br>" . $conn->error;
-                echo json_encode(["success" => 0,"msg"=>$msg]);
-            }    
-            
-            }
-            
-             else
-                //echo "too much"
-                 ;
-            
-            
-            
-           
-            
-            
-            
+                if ($conn->query($sql) === TRUE) {
+                    echo json_encode(["success" => 1,"msg"=>"success insert order"]);
+                } else {
+                    $msg = "Error: " . $sql . "<br>" . $conn->error;
+                    echo json_encode(["success" => 0,"msg"=>$msg]);
+                }     
+            }        
         }
-        
-
+        //斷開連線
         $conn->close();
-    }
-    
-        
+    }         
 }
 
 
