@@ -1,100 +1,76 @@
 
 <?php
 
-
+//dirname是這個檔案的根目錄，套兩次dirname就是這個檔案的根根目錄。
 $parentDirName = dirname(dirname(__FILE__));
 
 //引用PHPMailer-5.2-stable資料夾裡面的寄信功能，注意：最外層的資料夾內要有PHPMailer-5.2-stable資料夾，和comfirm_mailer.php的檔案
+//用require'../../PHPMailer-5.2-stable/PHPMailerAutoload.php'會有錯誤，網路上說是因為PHPMailer只能用絕對路徑require，用相對路徑require會有問題
 require_once("$parentDirName/PHPMailer-5.2-stable/PHPMailerAutoload.php"); //記得引入檔案 
 
+//能連線資料庫
 require_once("$parentDirName/db/db_connection.php"); 
 
-class ConfirmMailer
+//創立一個寄信類別Mailer
+class Mailer
 {
+    //裡面有private的成員變數
 	private $m_mail;
     private $stdId;
     private $name;
     private $subject;
     private $price;
 
+    
     //建構子，其中包含寄信的一些基本設定。
 	function __construct()
 	{
 		$this -> m_mail = new PHPMailer;
+        
+        //若開啟Debug模式，當寄信時會噴出很多寄信的細節，出錯時很好找，但是平常可以comment掉
 		//$this -> m_mail->SMTPDebug = 3; // 開啟偵錯模式
 
+        //我們用的是SMTP寄信，且寄信內文符合HTML格式
 		$this -> m_mail->isSMTP(); // Set mailer to use SMTP
         $this -> m_mail ->isHTML(true);   
         
+        
         //若要用gmail寄信，將下面這一行改成smtp.gmail.com
+        //如果要用自己的gmail寄信，記得要改gmail容許低安全性程式執行的按鍵，可參考以下網址
+        //https://sites.google.com/a/mail.ncnu.edu.tw/ems/home/faqs/cloudmail-wen-ti/faq-c-0026
+        
+        //寄信的伺服器是smtp.gmail.com
         $this -> m_mail->Host = 'smtp.gmail.com'; // Specify main and backup SMTP servers(台大的smtp)
-
-		$this -> m_mail->SMTPAuth = true; // Enable SMTP authentication
-		$this -> m_mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
-		$this -> m_mail->Port = 465; // TCP port to connect to
-        //$this -> m_mail->CharSet = "utf-8"; //郵件編碼
-		//$this -> m_mail->setFrom('ntueeshb@gmail.com', '二手書網站'); //寄件的Gmail$
-        $this -> m_mail->setFrom('ntueesaad@gmail.com', '台大電機學術部'); //寄件的Gmail$
-            
+        
+        
+		
+        $this -> m_mail->SMTPAuth = true; // Enable SMTP authentication
+		
+        //我們用ssl方式寄信
+        $this -> m_mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
+		
+        //ssl的Port號是465
+        $this -> m_mail->Port = 465; // ssl port to connect to
+        
+        //設定寄信信箱和寄信人名稱
+		$this -> m_mail->setFrom('ntueeshb@gmail.com', '二手書網站'); //寄件的Gmail$
+        
+        //預設信件主旨，內文、替換內文
 		$this -> m_mail->Subject = '二手書網站';
 		$this -> m_mail->Body = '報告班長，完全沒有畫面';
 		$this -> m_mail->AltBody = '報告班長，完全沒有畫面';
 		
 	}
     
-    public function setUsernameAndPassword( $userName, $passWord)
+    //設定寄信的帳密
+    private function setUsernameAndPassword( $userName, $passWord)
 	{
 		$this -> m_mail->Username = $userName;
 		$this -> m_mail->Password = $passWord;
 	}
     
-    public function sellerSetMail( $_stdId, $_name, $_subject, $_price ){
-        
-        $this -> stdId = $_stdId;
-        
-        $this -> name = $_name;
-        $this -> subject = $_subject;
-        $this -> price = $_price;
-    }
-	public function removeAllRecipient(){
-        $this->m_mail->ClearAllRecipients( );
-    }
-
-    //更改主旨
-	public function addSubject( $subject )
-	{
-		$this -> m_mail->Subject = $subject;
-	}
-    
-    //更改內文
-	public function addBody( $body )
-	{
-		
-		$this -> m_mail->Body = $body;
-		$this -> m_mail->AltBody = $body;
-	}
-    
-    //確認寄信
-	public function sendMail()
-	{
-		if(!$this -> m_mail->send()) {
-			echo 'Message could not be sent.';
-			echo 'Mailer Error: ' . $this->m_mail->ErrorInfo;
-		}
-		else{
-			echo 'Message has been sent<br>';
-		}
-	}
-    
-    public function addRecipient( $recipientMail, $recipientName )
-	{
-		$this -> m_mail -> addAddress($recipientMail, $recipientName);
-	}
-    
-    
-    
-    
-    public function setUser(){
+    //在資料庫中email資料表找尋寄信的帳密
+    private function setUser(){
         $conn = connection();
         $account = 'ntueeshb@gmail.com';
         
@@ -111,9 +87,64 @@ class ConfirmMailer
         
     }
     
+    //更改主旨
+	private function addSubject( $subject )
+	{
+		$this -> m_mail->Subject = $subject;
+	}
+    
+    //更改內文
+	private function addBody( $body )
+	{
+		
+		$this -> m_mail->Body = $body;
+		$this -> m_mail->AltBody = $body;
+	}
+    
+    
+    
+    //確認寄信
+	private function sendMail()
+	{
+		if(!$this -> m_mail->send()) {
+            $msgError = "Message could not be sent. Mailer Error: " . $this->m_mail->ErrorInfo;
+			echo json_encode(["success"=>"0","msg"=>"$msgError"]);
+			
+		}
+		else{
+            echo json_encode(["success"=>"1","msg"=>"Message has been sent"]);	
+		}
+	}
+    
+    //賣家要寄信前，先呼叫這個函式，將基本資料assign進成員變數中
+    public function sellerSetMail( $_stdId, $_name, $_subject, $_price ){
+        
+        $this -> stdId = $_stdId;
+        $this -> name = $_name;
+        $this -> subject = $_subject;
+        $this -> price = $_price;
+    }
+    
+    //非常重要!!當在迴圈中要寄給很多不同收信人各自的信件時，每次都要先呼叫這個函式去除上一位收件人的信箱，否則第一個人會收到所有人的信件
+	public function removeAllRecipient(){
+        $this->m_mail->ClearAllRecipients( );
+    }
+    
+    //加入收件人
+    public function addRecipient( $recipientMail, $recipientName )
+	{
+		$this -> m_mail -> addAddress($recipientMail, $recipientName);
+	}
+    
+    
+    
+    
+    
+    
     
     public function sendMailForm(){
         $this->setUser();
+        $this->removeAllRecipient();
         
         $this->addRecipient($this->stdId . '@ntu.edu.tw', $this->name);
         
@@ -126,11 +157,11 @@ class ConfirmMailer
     }
     
     public function sendMailReceive(){
+        
         $this->setUser();
         
         $this->addRecipient($this->stdId . '@ntu.edu.tw', $this->name);
-        
-        
+    
         $body = $this->name .'先生/小姐您好，已收到' . $this->subject . '的書，為' . $this->price . '元';
         $this -> addBody( $body );
         

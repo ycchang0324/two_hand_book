@@ -27,20 +27,20 @@ class Manage {
     if ($conn->query($sql) === TRUE) {
           echo json_encode(["success"=>1,"msg"=>"成功收書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
         
-        $confirm_mailer = new ConfirmMailer;
+        $mailer = new Mailer;
         $sql = "SELECT * FROM bookorder WHERE id='$id'";
         $result = $conn->query($sql);
         
         if($result->num_rows > 0)
              $orderList = $result -> fetch_all(MYSQLI_ASSOC);
         
-        $confirm_mailer -> sellerSetMail( 
+        $mailer -> sellerSetMail( 
             $orderList[0][stdId], 
             $orderList[0][name], 
             $orderList[0][subject], 
             $orderList[0][price] 
         );
-        $confirm_mailer->sendMailReceive();
+        $mailer->sendMailReceive();
         
           
         } else {
@@ -74,8 +74,8 @@ class Manage {
     }
     
     function sendMailNotReceive(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer->sendMailNotReceive();
+        $mailer = new Mailer;
+        $mailer->sendMailNotReceive();
     }
     
     
@@ -128,8 +128,8 @@ class Manage {
     }
     
     function sendSellingResult(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer->sendSellingResult();
+        $mailer = new Mailer;
+        $mailer->sendSellingResult();
 
         $conn->close();
         
@@ -157,20 +157,20 @@ class Manage {
     if ($conn->query($sql) === TRUE) {
             echo json_encode(["success"=>1,"msg"=>"成功領錢或退書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
         
-            $confirm_mailer = new ConfirmMailer;
+            $mailer = new Mailer;
             $sql = "SELECT * FROM bookorder WHERE id='$id'";
             $result = $conn->query($sql);
 
             if($result->num_rows > 0)
                  $orderList = $result -> fetch_all(MYSQLI_ASSOC);
 
-            $confirm_mailer -> sellerSetMail( 
+            $mailer -> sellerSetMail( 
                 $orderList[0][stdId], 
                 $orderList[0][name], 
                 $orderList[0][subject], 
                 $orderList[0][price] 
             );
-            $confirm_mailer->sendMailGivenBack();
+            $mailer->sendMailGivenBack();
             
             }else {
                 $msg = "更改狀態失敗 " . $conn->error;
@@ -200,8 +200,8 @@ class Manage {
     }
     
     function sendMailNotGivenBack(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer -> sendMailNotGivenBack();
+        $mailer = new Mailer;
+        $mailer -> sendMailNotGivenBack();
     }
     
     

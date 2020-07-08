@@ -15,7 +15,7 @@ class Seller {
       
     
     //建構子，將賣家基本資料assign進物件中
-    function __construct($_name, $_stdId, $_category, $_subject, $_price, $_others) {
+    function __construct($_name, $_stdId, $_category, $_subject, $_price, $_fee, $_others) {
     
         $this->name = $_name;
         $this->stdId = $_stdId;
@@ -23,7 +23,7 @@ class Seller {
         $this->subject = $_subject;
         $this->price = $_price;
         $this->state = '未收到書';
-        $this->fee = 0;
+        $this->fee = $_fee;
         $this->others = $_others;
 
       
@@ -76,12 +76,15 @@ class Seller {
                     )";
             
             if ($conn->query($sql) === TRUE) {
-                
+                /*
+                $sql = "DELETE FROM seller WHERE stdId = ''";
+                conn->query($sql);
                 echo json_encode(["success" => 1,"msg"=>"success insert order"]);
+                */
                 
-                $confirm_mailer = new ConfirmMailer;
-                $confirm_mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
-                $confirm_mailer -> sendMailForm();
+                $mailer = new Mailer;
+                $mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
+                $mailer -> sendMailForm();
                 
                 
             } else {
@@ -117,9 +120,9 @@ class Seller {
                     '$this->others'
                     )";
                 
-                $confirm_mailer = new ConfirmMailer;
-                $confirm_mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
-                $confirm_mailer -> sendMailForm();
+                $mailer = new Mailer;
+                $mailer -> sellerSetMail( $this->stdId, $this->name, $this->subject, $this->price );
+                $mailer -> sendMailForm();
 
             if ($conn->query($sql) === TRUE) {
                 echo json_encode(["success" => 1,"msg"=>"success insert order"]);

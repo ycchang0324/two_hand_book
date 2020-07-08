@@ -3,7 +3,7 @@ require 'db_connection.php';
 $conn = connection();
 
 $sql = "CREATE TABLE seller (
-stdId INT(6) NOT NULL,
+stdId VARCHAR(9) NOT NULL,
 name VARCHAR(30) NOT NULL,
 bookNum INT(2) NOT NULL,
 reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
