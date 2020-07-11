@@ -8,9 +8,11 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require './db/db_connection.php';
 require_once './class/mail.php';
 
+
+
 // POST DATA
 $conn = connection();
-
+mysqli_query($conn,"SET NAMES 'utf8mb4'");
 $data = json_decode(file_get_contents("php://input"));
 if( $data -> comment != "" ){
 
