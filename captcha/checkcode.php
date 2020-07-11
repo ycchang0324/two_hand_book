@@ -16,7 +16,8 @@ if(!isset($_SESSION)){
 if((!empty($_SESSION['check_word'])) && (!empty($captcha))){  //判斷此兩個變數是否為空
     // echo $_SESSION['check_word'];
     $answer = $_SESSION['check_word'];
-    //echo $answer;
+    //echo "captcha: " . $captcha . <br>;
+    //echo "answer: " . $answer;
      if($answer == $captcha){
          
           $_SESSION['check_word'] = ''; //比對正確後，清空將check_word值

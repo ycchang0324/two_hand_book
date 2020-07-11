@@ -1,11 +1,9 @@
 <?php
 
-
+//這是Manage類別，裡面有五個函式
 class Manage {
-  
-
-    
-    function receiveBookStdId($stdId){
+    //這個函式輸入學號後，會把所有這個學號的訂單全部秀出來
+    function getBookOrderStdId($stdId){
         $conn = connection();
         $sql = "SELECT * FROM bookorder WHERE stdId = '$stdId' AND state = '未收到書'";
         $result = $conn->query($sql);
@@ -20,40 +18,26 @@ class Manage {
         
     }
     
-    function isReceive($id){
+    //這個函式輸入訂單編號後，會把這個訂單秀出來
+    function getBookOrderBookId($id){
         $conn = connection();
-        $sql = "UPDATE bookorder SET state='已收到書' WHERE id='$id' AND state = '未收到書'";
-
-    if ($conn->query($sql) === TRUE) {
-          echo json_encode(["success"=>1,"msg"=>"成功收書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        
-        $confirm_mailer = new ConfirmMailer;
-        $sql = "SELECT * FROM bookorder WHERE id='$id'";
+        $sql = "SELECT * FROM bookorder WHERE id = '$id' AND state = '未收到書'";
         $result = $conn->query($sql);
-        
-        if($result->num_rows > 0)
-             $orderList = $result -> fetch_all(MYSQLI_ASSOC);
-        
-        $confirm_mailer -> sellerSetMail( 
-            $orderList[0][stdId], 
-            $orderList[0][name], 
-            $orderList[0][subject], 
-            $orderList[0][price] 
-        );
-        $confirm_mailer->sendMailReceive();
-        
-          
-        } else {
-            $msg = "收書登記失敗: " . $conn->error;
-          echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        
+        if($result->num_rows > 0){
+            $orderList = $result -> fetch_all(MYSQLI_ASSOC);
+            echo json_encode(["success"=>1,"orderList"=>$orderList],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
         }
-        
+        else{
+            echo json_encode(["success"=>0]);
+        }
         $conn->close();
+        
     }
+    
+    //呼叫這個函式後，會把所有尚未收到書的訂單全部改成未收到書
     function notReceive(){
         $conn = connection();
-        $sql = "SELECT * FROM bookorder WHERE state = '未收到書'";
+        $sql = "SELECT * FROM bookorder WHERE state = '尚未收到書'";
         $result = $conn->query($sql);
         while($row = $result->fetch_assoc()){
             $sql = "UPDATE bookorder SET state='沒收到書' WHERE id=$row[id]";
@@ -63,52 +47,12 @@ class Manage {
             }else {
                 $msg = "更改狀態失敗 " . $conn->error;
                 echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-            }
-            
-            
+            }   
         }
-        
-        
-
         $conn->close();
     }
     
-    function sendMailNotReceive(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer->sendMailNotReceive();
-    }
-    
-    
-    
-    function buyBookToFront($id){
-        $conn = connection();
-        $sql = "SELECT * FROM bookorder WHERE id='$id' AND state = '已收到書'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            $orderList = $result -> fetch_all(MYSQLI_ASSOC);
-            echo json_encode(["success"=>1,"orderList"=>$orderList],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        }
-        else{
-            echo json_encode(["success"=>0]);
-        }
-        
-        $conn->close();
-    }
-    
-    function isSold($id){
-        $conn = connection();
-        $sql = "UPDATE bookorder SET state='已賣出' WHERE id='$id' AND state = '已收到書'";
-
-    if ($conn->query($sql) === TRUE) {
-          echo json_encode(["success"=>1,"msg"=>"成功賣書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        } else {
-          $msg = "賣書失敗" . $conn->error;
-                echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        }
-        
-        $conn->close();
-    }
-    
+    //呼叫這個函式後，會把所有已收到書的訂單全部改成沒賣出
     function notSold(){
         $conn = connection();
         $sql = "SELECT * FROM bookorder WHERE state = '已收到書'";
@@ -127,59 +71,7 @@ class Manage {
         $conn->close(); 
     }
     
-    function sendSellingResult(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer->sendSellingResult();
-
-        $conn->close();
-        
-    }
-    
-    function givenBackStdId($stdId){
-        $conn = connection();
-        $sql = "SELECT * FROM bookorder WHERE stdId = '$stdId' AND (state = '已賣出' or state = '沒賣出')";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            $orderList = $result -> fetch_all(MYSQLI_ASSOC);
-            echo json_encode(["success"=>1,"orderList"=>$orderList],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        }
-        else{
-            echo json_encode(["success"=>0]);
-        }
-        $conn->close();
-        
-    }
-    
-    function isGivenBack($id){
-        $conn = connection();
-        $sql = "UPDATE bookorder SET state='已領錢或退書' WHERE id='$id'";
-
-    if ($conn->query($sql) === TRUE) {
-            echo json_encode(["success"=>1,"msg"=>"成功領錢或退書"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        
-            $confirm_mailer = new ConfirmMailer;
-            $sql = "SELECT * FROM bookorder WHERE id='$id'";
-            $result = $conn->query($sql);
-
-            if($result->num_rows > 0)
-                 $orderList = $result -> fetch_all(MYSQLI_ASSOC);
-
-            $confirm_mailer -> sellerSetMail( 
-                $orderList[0][stdId], 
-                $orderList[0][name], 
-                $orderList[0][subject], 
-                $orderList[0][price] 
-            );
-            $confirm_mailer->sendMailGivenBack();
-            
-            }else {
-                $msg = "更改狀態失敗 " . $conn->error;
-                echo json_encode(["success"=>0,"msg"=>"$msg"],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-            }
-        
-        $conn->close();
-    }
-    
+    //呼叫這個函式後，會把所有已賣出或沒賣出的訂單改成未領錢或退出的狀態
     function notGivenBack(){
         $conn = connection();
         $sql = "SELECT * FROM bookorder WHERE state = '已賣出' OR state = '沒賣出'";
@@ -197,30 +89,6 @@ class Manage {
     
         $conn->close(); 
         
-    }
-    
-    function sendMailNotGivenBack(){
-        $confirm_mailer = new ConfirmMailer;
-        $confirm_mailer -> sendMailNotGivenBack();
-    }
-    
-    
-    function showNotGivenBack(){
-        $conn = connection();
-        $sql = "SELECT * FROM bookorder WHERE state = '已賣出' OR state = '沒賣出'";
-        $result = $conn->query($sql);
-        if($result->num_rows > 0){
-            $orderList = $result -> fetch_all(MYSQLI_ASSOC);
-            echo json_encode(["success"=>1,"orderList"=>$orderList],JSON_UNESCAPED_UNICODE,JSON_FORCE_OBJECT);
-        }
-        else{
-            echo json_encode(["success"=>0]);
-        }
-        $conn->close();
-        
-    }
-    
-    
-    
+    }   
 }
 ?>
